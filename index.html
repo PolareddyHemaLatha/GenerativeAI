@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    button {
+      font-size: 16px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    
+  </style>
+  <title>Mirrored Wavy Drawing</title>
+</head>
+<body>
+  <button onclick="clearDrawings()">Clear</button>
+  <script>
+    let drawings = [];
+    let mirroredDrawings = [];
+
+    function setup() {
+      createCanvas(800, 600);
+      startNewDrawing();
+    }
+
+    function draw() {
+      background(255);
+
+      // Draw the user's drawings
+      for (let i = 0; i < drawings.length; i++) {
+        let hue = (i * 30) % 360;
+        fill(hue, 100, 200);
+        beginShape();
+        for (let point of drawings[i]) {
+          vertex(point.x, point.y);
+        }
+        for (let point of mirroredDrawings[i]) {
+          vertex(point.x, point.y);
+        }
+        endShape(CLOSE);
+      }
+    }
+
+    function startNewDrawing() {
+      drawings.push([]);
+      mirroredDrawings.push([]);
+      
+    }
+
+    function clearDrawings() {
+      // Clear all drawings
+      drawings = [];
+      mirroredDrawings = [];
+    }
+
+    function mousePressed() {
+      // Start a new set of drawings when the mouse is pressed
+      startNewDrawing();
+    }
+
+    function mouseDragged() {
+      let point = createVector(mouseX, mouseY);
+      drawings[drawings.length - 1].push(point);
+
+      // Create a mirrored point and add it to the mirrored drawing
+      let mirroredPoint = createVector(width - mouseX, mouseY);
+      mirroredDrawings[mirroredDrawings.length - 1].push(mirroredPoint);
+    }
+  </script>
+</body>
+</html>
